@@ -1,0 +1,5 @@
+mutation createTask($dto: CreateTaskInput!) {
+    createTask(dto: $dto) {
+        id
+    }
+}

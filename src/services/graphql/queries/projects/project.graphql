@@ -1,5 +1,14 @@
-query allProjects($dto: ProjectFiltersInput!) {
-    allProjects(dto: $dto){
+fragment ProjectTaskItem on Task {
+  id
+  title
+  status
+  isArchived
+  description
+  createdAt
+}
+
+query project($id: String!) {
+    project(id: $id){
         id
         name
         user {
@@ -8,16 +17,10 @@ query allProjects($dto: ProjectFiltersInput!) {
             email
         }
         archiveTasks: tasks(archived: true) {
-            id
-            title
-            status
-            isArchived
+          ...ProjectTaskItem
         }
         activeTasks: tasks(archived: false) {
-            id
-            title
-            status
-            isArchived
+          ...ProjectTaskItem
         }
         createdAt
         updatedAt
