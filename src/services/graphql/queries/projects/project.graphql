@@ -5,6 +5,9 @@ fragment ProjectTaskItem on Task {
   isArchived
   description
   createdAt
+  project {
+    id
+  }
 }
 
 query project($id: String!) {

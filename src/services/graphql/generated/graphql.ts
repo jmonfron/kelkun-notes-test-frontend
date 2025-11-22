@@ -220,14 +220,14 @@ export type AllProjectsQueryVariables = Exact<{
 
 export type AllProjectsQuery = { __typename?: 'Query', allProjects: Array<{ __typename?: 'Project', id: string, name: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, firstname: string, email: string }, archiveTasks?: Array<{ __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean }> | null, activeTasks?: Array<{ __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean }> | null }> };
 
-export type ProjectTaskItemFragment = { __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean, description?: string | null, createdAt: any };
+export type ProjectTaskItemFragment = { __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean, description?: string | null, createdAt: any, project: { __typename?: 'Project', id: string } };
 
 export type ProjectQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type ProjectQuery = { __typename?: 'Query', project: { __typename?: 'Project', id: string, name: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, firstname: string, email: string }, archiveTasks?: Array<{ __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean, description?: string | null, createdAt: any }> | null, activeTasks?: Array<{ __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean, description?: string | null, createdAt: any }> | null } };
+export type ProjectQuery = { __typename?: 'Query', project: { __typename?: 'Project', id: string, name: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, firstname: string, email: string }, archiveTasks?: Array<{ __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean, description?: string | null, createdAt: any, project: { __typename?: 'Project', id: string } }> | null, activeTasks?: Array<{ __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean, description?: string | null, createdAt: any, project: { __typename?: 'Project', id: string } }> | null } };
 
 export type AllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -242,6 +242,9 @@ export const ProjectTaskItemFragmentDoc = gql`
   isArchived
   description
   createdAt
+  project {
+    id
+  }
 }
     `;
 export const CreateProjectDocument = gql`
