@@ -33,7 +33,6 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import {
-    ProjectDocument,
   ProjectTaskItemFragment,
   TaskStatus,
   useUpdateTaskMutation
@@ -64,12 +63,7 @@ export function UpdateTaskFormDialog({
       toast.success('Tâche mise à jour avec succès')
       setIsOpen(false)
     },
-
-    refetchQueries: [
-    {
-      query: ProjectDocument,
-      variables: { id: task.project.id }
-    }]
+    refetchQueries: ['project']
   })
 
   const form = useForm<UpdateTaskFormValues>({

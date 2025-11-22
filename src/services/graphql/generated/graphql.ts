@@ -97,6 +97,7 @@ export type Project = {
 
 export type ProjectTasksArgs = {
   archived?: InputMaybe<Scalars['Boolean']['input']>;
+  status?: InputMaybe<TaskStatus>;
 };
 
 export type ProjectFiltersInput = {
@@ -152,6 +153,8 @@ export type TaskFiltersInput = {
   archived?: InputMaybe<Scalars['Boolean']['input']>;
   /** Identifiant du projet */
   projectId?: InputMaybe<Scalars['String']['input']>;
+  /** Filtrer par statut de la tâche */
+  status?: InputMaybe<TaskStatus>;
 };
 
 export enum TaskStatus {
@@ -224,6 +227,7 @@ export type ProjectTaskItemFragment = { __typename?: 'Task', id: string, title: 
 
 export type ProjectQueryVariables = Exact<{
   id: Scalars['String']['input'];
+  status?: InputMaybe<TaskStatus>;
 }>;
 
 
@@ -447,7 +451,7 @@ export function refetchAllProjectsQuery(variables: AllProjectsQueryVariables) {
       return { query: AllProjectsDocument, variables: variables }
     }
 export const ProjectDocument = gql`
-    query project($id: String!) {
+    query project($id: String!, $status: TaskStatus) {
   project(id: $id) {
     id
     name
@@ -459,7 +463,7 @@ export const ProjectDocument = gql`
     archiveTasks: tasks(archived: true) {
       ...ProjectTaskItem
     }
-    activeTasks: tasks(archived: false) {
+    activeTasks: tasks(archived: false, status: $status) {
       ...ProjectTaskItem
     }
     createdAt
@@ -481,6 +485,7 @@ export const ProjectDocument = gql`
  * const { data, loading, error } = useProjectQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      status: // value for 'status'
  *   },
  * });
  */

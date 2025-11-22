@@ -1,19 +1,25 @@
 'use client'
 
 import { useParams } from 'next/navigation'
+import { useState } from 'react'
 
 import { ProjectHeader } from '@/components/projects/ProjectHeader'
 import { CreateTaskFormDialog } from '@/components/tasks/CreateTaskFormDialog'
 import { TaskSection } from '@/components/tasks/TaskSection'
+import { TaskStatusTab } from '@/components/tasks/TaskStatusTab'
 import { Loader } from '@/components/ui/loader'
-import { ProjectTaskItemFragment, useProjectQuery } from '@/services/graphql/generated/graphql'
+import { FilterType } from '@/lib/tasks'
+import { ProjectTaskItemFragment , useProjectQuery } from '@/services/graphql/generated/graphql'
+
 
 export default function ProjectDetailsPage() {
   const params = useParams<{ projectId: string }>()
   const projectId = params.projectId
 
+  const [activeFilter, setActiveFilter] = useState<FilterType>('ALL')
+
   const { data, loading } = useProjectQuery({
-    variables: { id: projectId },
+    variables: { id: projectId, status: activeFilter === 'ALL' ? undefined : activeFilter },
     skip: !projectId
   })
 
@@ -50,11 +56,12 @@ export default function ProjectDetailsPage() {
     <div className="flex flex-col h-full">
       <div className="flex flex-col justify-between mb-6">
         <ProjectHeader name={project.name} createdAt={project.createdAt} />
-        <div className='flex justify-end'>
+        <div className='flex justify-end mb-4'>
           <CreateTaskFormDialog
             projectId={project.id}
           />
         </div>
+       <TaskStatusTab activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </div>
 
       <div className="flex-1 overflow-y-auto space-y-6">

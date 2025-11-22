@@ -18,3 +18,5 @@ export const statusStyles  = {
   [TaskStatus.InProgress]: 'bg-yellow-400/10 text-yellow-400 border-yellow-400/20',
   [TaskStatus.Done]: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
 }
+
+export type FilterType = TaskStatus | 'ALL'

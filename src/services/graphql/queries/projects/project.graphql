@@ -10,7 +10,7 @@ fragment ProjectTaskItem on Task {
   }
 }
 
-query project($id: String!) {
+query project($id: String!, $status: TaskStatus) {
     project(id: $id){
         id
         name
@@ -22,7 +22,7 @@ query project($id: String!) {
         archiveTasks: tasks(archived: true) {
           ...ProjectTaskItem
         }
-        activeTasks: tasks(archived: false) {
+        activeTasks: tasks(archived: false, status: $status) {
           ...ProjectTaskItem
         }
         createdAt
