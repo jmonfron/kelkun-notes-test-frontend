@@ -2,16 +2,17 @@
 
 import { ProjectTaskItemFragment } from '@/services/graphql/generated/graphql'
 
-import { TaskCard } from './TaskCard'
+import TaskItem from './TaskItem'
 
-interface TaskSectionProps {
+
+interface IProps {
   title: string
   emptyMessage: string
   tasks: ProjectTaskItemFragment[]
   variant?: 'active' | 'archived'
 }
 
-export function TaskSection({ title, emptyMessage, tasks, variant = 'active' }: TaskSectionProps) {
+export default function TaskSection({ title, emptyMessage, tasks, variant = 'active' }: IProps) {
   if (tasks.length === 0 && variant === 'archived') {
     return null
   }
@@ -33,9 +34,9 @@ export function TaskSection({ title, emptyMessage, tasks, variant = 'active' }: 
           {emptyMessage}
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} variant={variant} />
+            <TaskItem key={task.id} task={task} variant={variant} />
           ))}
         </div>
       )}

@@ -46,15 +46,15 @@ const updateTaskSchema = z.object({
 
 type UpdateTaskFormValues = z.infer<typeof updateTaskSchema>
 
-interface UpdateTaskFormDialogProps {
+interface IProps {
   task: ProjectTaskItemFragment
   children: ReactNode
 }
 
-export function UpdateTaskFormDialog({
+export default function UpdateTaskFormDialog({
   task,
   children
-}: UpdateTaskFormDialogProps) {
+}: IProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const [updateTask, { loading }] = useUpdateTaskMutation({
@@ -109,7 +109,7 @@ export function UpdateTaskFormDialog({
         </button>
       </DialogTrigger>
 
-      <DialogContent onClick={(e) => e.stopPropagation()}>
+      <DialogContent className="sm:max-w-md" onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>Modifier la tâche</DialogTitle>
         </DialogHeader>
@@ -117,14 +117,14 @@ export function UpdateTaskFormDialog({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-4"
+            className="space-y-6"
           >
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Titre</FormLabel>
+                  <FormLabel>Titre de la tâche</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -173,7 +173,7 @@ export function UpdateTaskFormDialog({
               )}
             />
 
-            <DialogFooter className="flex justify-end gap-2">
+            <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
@@ -183,8 +183,8 @@ export function UpdateTaskFormDialog({
               </Button>
               <Button
                 type="submit"
-                disabled={loading}
                 className="bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={loading}
               >
                 {loading ? 'Enregistrement…' : 'Enregistrer'}
               </Button>

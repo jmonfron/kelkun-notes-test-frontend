@@ -5,7 +5,6 @@ import {useRouter} from 'next/navigation';
 import CreateProjectFormDialog from '@/components/projects/CreateProjectFormDialog';
 import ProjectEmptyState from '@/components/projects/ProjectEmptyState';
 import ProjectItem from '@/components/projects/ProjectItem';
-import { Loader } from '@/components/ui/loader';
 import {useAuth} from '@/providers/AuthProvider'
 import {Project, useAllProjectsQuery} from '@/services/graphql/generated/graphql'
 
@@ -27,7 +26,11 @@ export default function ProjectsPage() {
   }
 
   if (loading) {
-    return <Loader label="Chargement des projets…"/>
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-gray-400">
+        <div className="animate-pulse">Chargement des projets...</div>
+      </div>
+    )
   }
   if (projects.length === 0) {
     return <ProjectEmptyState onCreated={handleCreated}/>

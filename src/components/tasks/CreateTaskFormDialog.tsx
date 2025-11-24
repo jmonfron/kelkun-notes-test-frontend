@@ -1,5 +1,3 @@
-'use client'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
@@ -11,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -26,7 +25,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import {
-  ProjectDocument,
+  Task,
   useCreateTaskMutation
 } from '@/services/graphql/generated/graphql'
 import { createTaskSchema } from '@/services/schemas/tasks/createTaskSchema'
@@ -35,27 +34,25 @@ import { createTaskSchema } from '@/services/schemas/tasks/createTaskSchema'
 
 interface IProps {
   projectId: string
+  onCreated: (task: Task) => void
 }
+
 type CreateTaskFormValues = z.infer<typeof createTaskSchema>
 
 
-export function CreateTaskFormDialog({
-  projectId
+export default function CreateTaskFormDialog({
+  projectId,
+  onCreated
 }: IProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [createTask, { loading }] = useCreateTaskMutation({
     onError: (err) => toast.error(err.message),
-    onCompleted: () => {
+    onCompleted: (res) => {
       toast.success('Tâche créée avec succès 🎉')
       setIsOpen(false)
       form.reset()
-    },
-    refetchQueries: [
-    {
-      query: ProjectDocument,
-      variables: { id: projectId }
-    }]
-
+      onCreated(res.createTask as Task)
+    }
   })
 
   const form = useForm<CreateTaskFormValues>({
@@ -67,7 +64,7 @@ export function CreateTaskFormDialog({
   })
 
   const handleSubmit = async (values: CreateTaskFormValues) => {
-    const res = await createTask({
+    await createTask({
       variables: {
         dto: {
           title: values.title,
@@ -76,43 +73,38 @@ export function CreateTaskFormDialog({
         }
       }
     })
-
-    if (res.data?.createTask) {
-      setIsOpen(false)
-      form.reset({
-        title: '',
-        description: ''
-      })
-    }
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+          className="bg-blue-600 hover:bg-blue-700 text-white flex flex-start items-center gap-2 self-start"
         >
           <Plus className="h-4 w-4"/>
           Nouvelle tâche
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Créer une tâche</DialogTitle>
+          <DialogDescription>
+            Ajoute une nouvelle tâche à ce projet
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-4"
+            className="space-y-6"
           >
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Titre</FormLabel>
+                  <FormLabel>Titre de la tâche</FormLabel>
                   <FormControl>
                     <Input placeholder="Titre de la tâche" {...field} />
                   </FormControl>
@@ -139,7 +131,8 @@ export function CreateTaskFormDialog({
               )}
             />
 
-            <DialogFooter className="flex justify-end gap-2">
+
+            <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
@@ -147,11 +140,16 @@ export function CreateTaskFormDialog({
               >
                 Annuler
               </Button>
-              <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700 text-white"
+              <Button
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={loading}
               >
+
                 {loading ? 'Création…' : 'Créer la tâche'}
               </Button>
             </DialogFooter>
+
           </form>
         </Form>
       </DialogContent>

@@ -49,8 +49,6 @@ export type Mutation = {
   createTask: Task;
   /** Permet de créer un nouvel utilisateur */
   createUser: User;
-  /** Permet de supprimer une tâche */
-  deleteTask: Scalars['Boolean']['output'];
   /** Permet de mettre à jour une tâche */
   updateTask: Task;
 };
@@ -68,11 +66,6 @@ export type MutationCreateTaskArgs = {
 
 export type MutationCreateUserArgs = {
   dto: CreateUserInput;
-};
-
-
-export type MutationDeleteTaskArgs = {
-  id: Scalars['String']['input'];
 };
 
 
@@ -114,7 +107,7 @@ export type Query = {
   /** Retourne la liste des utilisateurs */
   allUsers: Array<User>;
   /** Retourne un projet par son identifiant */
-  project: Project;
+  project?: Maybe<Project>;
 };
 
 
@@ -231,7 +224,7 @@ export type ProjectQueryVariables = Exact<{
 }>;
 
 
-export type ProjectQuery = { __typename?: 'Query', project: { __typename?: 'Project', id: string, name: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, firstname: string, email: string }, archiveTasks?: Array<{ __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean, description?: string | null, createdAt: any, project: { __typename?: 'Project', id: string } }> | null, activeTasks?: Array<{ __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean, description?: string | null, createdAt: any, project: { __typename?: 'Project', id: string } }> | null } };
+export type ProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: string, name: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, firstname: string, email: string }, archiveTasks?: Array<{ __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean, description?: string | null, createdAt: any, project: { __typename?: 'Project', id: string } }> | null, activeTasks?: Array<{ __typename?: 'Task', id: string, title: string, status: TaskStatus, isArchived: boolean, description?: string | null, createdAt: any, project: { __typename?: 'Project', id: string } }> | null } | null };
 
 export type AllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
