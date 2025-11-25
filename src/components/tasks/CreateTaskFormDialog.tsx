@@ -78,7 +78,7 @@ export default function CreateTaskFormDialog({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 self-start"
+          className="bg-blue-600 hover:bg-blue-700 text-white gap-2 "
         >
           <Plus className="h-4 w-4"/>
           Nouvelle tâche
@@ -89,7 +89,7 @@ export default function CreateTaskFormDialog({
         <DialogHeader>
           <DialogTitle>Créer une tâche</DialogTitle>
           <DialogDescription>
-            Ajoute une nouvelle tâche à ce projet
+            Ajoute une nouvelle tâche à ce projet.
           </DialogDescription>
         </DialogHeader>
 
@@ -145,7 +145,7 @@ export default function CreateTaskFormDialog({
                 disabled={loading}
               >
 
-                {loading ? 'Création…' : 'Créer la tâche'}
+                {loading ? 'Création...' : 'Créer la tâche'}
               </Button>
             </DialogFooter>
 

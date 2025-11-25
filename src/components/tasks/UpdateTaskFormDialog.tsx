@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -112,6 +113,9 @@ export default function UpdateTaskFormDialog({
       <DialogContent className="sm:max-w-md" onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>Modifier la tâche</DialogTitle>
+          <DialogDescription>
+            Mets à jour les détails de la tâche.
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -126,7 +130,7 @@ export default function UpdateTaskFormDialog({
                 <FormItem>
                   <FormLabel>Titre de la tâche</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="Titre de la tâche" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,7 +144,11 @@ export default function UpdateTaskFormDialog({
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea rows={3} {...field} />
+                    <Textarea
+                      placeholder="Description (optionnelle)"
+                      rows={3}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -186,7 +194,7 @@ export default function UpdateTaskFormDialog({
                 className="bg-blue-600 hover:bg-blue-700 text-white"
                 disabled={loading}
               >
-                {loading ? 'Enregistrement…' : 'Enregistrer'}
+                {loading ? 'Enregistrement...' : 'Enregistrer'}
               </Button>
             </DialogFooter>
           </form>

@@ -15,7 +15,7 @@ const EMPTY_MESSAGES: Record<string, string> = {
   [TaskStatus.Todo]: 'Aucune tâche à faire.',
   [TaskStatus.InProgress]: 'Aucune tâche en cours.',
   [TaskStatus.Done]: 'Aucune tâche terminée.',
-  ALL: 'Aucune tâche pour ce projet.'
+  ALL: 'Aucune tâche active pour ce projet.'
 }
 
 
@@ -49,13 +49,13 @@ export default function ProjectDetailsPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex justify-between mb-6">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-white">
             {project.name}
           </h1>
 
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-gray-400 mt-2">
             Créé le{' '}
             <span className="text-gray-300">
               {dayjs(project.createdAt).format('DD MMM YYYY')}

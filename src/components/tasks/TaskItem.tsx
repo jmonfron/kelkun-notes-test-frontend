@@ -39,11 +39,11 @@ export default function TaskItem({ task, variant = 'active' }: IProps) {
   return (
 
     <UpdateTaskFormDialog task={task} >
+
       <div
-        className={`rounded-lg border p-4 ${containerClasses}`}
-      >
-        <div className="flex items-center justify-between gap-2">
-          <h3 className={`text-base font-semibold truncate ${titleClasses}`}>
+        className={`bg-gray-950 border border-gray-800 rounded-lg p-4 hover:bg-gray-900 transition-colors cursor-pointer ${containerClasses}`}>
+        <div className="flex items-center justify-between">
+          <h3 className={`text-lg font-semibold text-white truncate ${titleClasses}`}>
             {task.title}
           </h3>
 
@@ -64,7 +64,7 @@ export default function TaskItem({ task, variant = 'active' }: IProps) {
           )}
         </div>
 
-        <p className="text-xs text-gray-400 mt-4">
+        <p className="text-sm text-gray-400 mt-2">
           Créé le{' '}
           <span className="text-gray-300">
             {dayjs(task.createdAt).format('DD MMM YYYY')}

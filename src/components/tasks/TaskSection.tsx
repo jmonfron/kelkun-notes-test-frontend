@@ -13,10 +13,6 @@ interface IProps {
 }
 
 export default function TaskSection({ title, emptyMessage, tasks, variant = 'active' }: IProps) {
-  if (tasks.length === 0 && variant === 'archived') {
-    return null
-  }
-
   return (
     <section>
       <h2
