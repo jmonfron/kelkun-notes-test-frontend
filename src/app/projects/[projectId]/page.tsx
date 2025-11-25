@@ -3,6 +3,7 @@
 import dayjs from 'dayjs'
 import { useParams } from 'next/navigation'
 
+import ProjectNotFound from '@/components/projects/ProjectNotFound'
 import CreateTaskFormDialog from '@/components/tasks/CreateTaskFormDialog'
 import TaskEmptyState from '@/components/tasks/TaskEmptyState'
 import TaskSection from '@/components/tasks/TaskSection'
@@ -17,18 +18,6 @@ const EMPTY_MESSAGES: Record<string, string> = {
   ALL: 'Aucune tâche pour ce projet.'
 }
 
-const ProjectNotFound = () => {
-  return (
-    <div className="flex flex-col h-full items-center justify-center text-center">
-      <h1 className="text-2xl font-semibold tracking-tight text-white mb-2">
-        Projet introuvable
-      </h1>
-      <p className="text-gray-400 mb-6">
-        Ce projet n'existe pas ou vous n'avez pas les droits pour y accéder.
-      </p>
-    </div>
-  )
-}
 
 const ProjectLoading = () => (
   <div className="flex flex-col items-center justify-center h-full text-gray-400">

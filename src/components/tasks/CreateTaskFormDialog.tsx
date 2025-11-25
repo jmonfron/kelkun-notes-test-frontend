@@ -46,7 +46,7 @@ export default function CreateTaskFormDialog({
   const [isOpen, setIsOpen] = useState(false)
   const [createTask, { loading }] = useCreateTaskMutation({
     onError: (err) => toast.error(err.message),
-    onCompleted: (res) => {
+    onCompleted: () => {
       toast.success('Tâche créée avec succès 🎉')
       setIsOpen(false)
       form.reset()
