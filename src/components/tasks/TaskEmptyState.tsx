@@ -1,12 +1,10 @@
 import { CheckSquare } from 'lucide-react';
 
-import { Task} from '@/services/graphql/generated/graphql';
-
 import CreateTaskFormDialog from './CreateTaskFormDialog';
 
 interface IProps {
   projectId: string
-  onCreated: (task: Task) => void
+  onCreated: () => void
 }
 
 export default function TaskEmptyState({projectId, onCreated}: IProps) {

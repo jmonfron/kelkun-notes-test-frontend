@@ -64,7 +64,7 @@ export default function ProjectDetailsPage() {
         </div>
         <CreateTaskFormDialog
           projectId={project.id}
-          onCreated={() => { refetch() }}
+          onCreated={refetch}
         />
       </div>
       <TaskStatusTab activeFilter={filter} setActiveFilter={setFilter} />

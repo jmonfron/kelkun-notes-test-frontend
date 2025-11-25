@@ -33,7 +33,7 @@ import { createTaskSchema } from '@/services/schemas/tasks/createTaskSchema'
 
 interface IProps {
   projectId: string
-  onCreated: (projectId: string) => void
+  onCreated: () => void
 }
 
 type CreateTaskFormValues = z.infer<typeof createTaskSchema>
@@ -50,7 +50,7 @@ export default function CreateTaskFormDialog({
       toast.success('Tâche créée avec succès 🎉')
       setIsOpen(false)
       form.reset()
-      onCreated(projectId)
+      onCreated()
     }
   })
 
@@ -78,7 +78,7 @@ export default function CreateTaskFormDialog({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className="bg-blue-600 hover:bg-blue-700 text-white flex flex-start items-center gap-2 self-start"
+          className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 self-start"
         >
           <Plus className="h-4 w-4"/>
           Nouvelle tâche
