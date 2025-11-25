@@ -2,23 +2,19 @@
 
 import dayjs from 'dayjs'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
 
 import CreateTaskFormDialog from '@/components/tasks/CreateTaskFormDialog'
 import TaskEmptyState from '@/components/tasks/TaskEmptyState'
 import TaskSection from '@/components/tasks/TaskSection'
 import TaskStatusTab from '@/components/tasks/TaskStatusTab'
-import { FilterType } from '@/lib/tasks'
-import { ProjectTaskItemFragment , TaskStatus, useProjectQuery } from '@/services/graphql/generated/graphql'
+import { useProjectDetails } from '@/hooks/domain/projects/useProjectDetails'
+import {  TaskStatus } from '@/services/graphql/generated/graphql'
 
-const getEmptyMessage = (filter: FilterType): string => {
-  const messages: Record<string, string> = {
-    [TaskStatus.Todo]: 'Aucune tâche à faire.',
-    [TaskStatus.InProgress]: 'Aucune tâche en cours.',
-    [TaskStatus.Done]: 'Aucune tâche terminée.',
-    ALL: 'Aucune tâche pour ce projet.'
-  }
-  return messages[filter] || 'Aucune tâche trouvée.'
+const EMPTY_MESSAGES: Record<string, string> = {
+  [TaskStatus.Todo]: 'Aucune tâche à faire.',
+  [TaskStatus.InProgress]: 'Aucune tâche en cours.',
+  [TaskStatus.Done]: 'Aucune tâche terminée.',
+  ALL: 'Aucune tâche pour ce projet.'
 }
 
 const ProjectNotFound = () => {
@@ -34,45 +30,33 @@ const ProjectNotFound = () => {
   )
 }
 
+const ProjectLoading = () => (
+  <div className="flex flex-col items-center justify-center h-full text-gray-400">
+    <div className="animate-pulse">Chargement du projet...</div>
+  </div>
+)
+
 export default function ProjectDetailsPage() {
   const params = useParams<{ projectId: string }>()
-  const projectId = params.projectId
 
-  const [activeFilter, setActiveFilter] = useState<FilterType>('ALL')
+  const {
+    project,
+    loading,
+    activeTasks,
+    archivedTasks,
+    filter,
+    setFilter,
+    refetch,
+    showOnboarding,
+    isFiltering
+  } = useProjectDetails(params.projectId)
 
-  const { data, loading, refetch} = useProjectQuery({
-    variables: { id: projectId, status: activeFilter === 'ALL' ? undefined : activeFilter },
-    skip: !projectId,
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first'
-  })
+  if (loading) return <ProjectLoading />
 
-  const project = data?.project
+  if (!project) return <ProjectNotFound />
 
-  if (loading) {
-    return  <div className="flex flex-col items-center justify-center h-full text-gray-400">
-      <div className="animate-pulse">Chargement des projets...</div>
-    </div>
-  }
+  if (showOnboarding) return <TaskEmptyState projectId={project.id} onCreated={refetch}/>
 
-  if (!project) {
-    return <ProjectNotFound />
-  }
-
-  const archivedTasks: ProjectTaskItemFragment[] = project?.archiveTasks ?? []
-  const activeTasks: ProjectTaskItemFragment[] = project?.activeTasks ?? []
-
-  const hasTasks = activeTasks.length > 0 || archivedTasks.length > 0
-  const isFiltering = activeFilter !== 'ALL'
-
-  if (!hasTasks && !isFiltering) {
-    return (
-      <TaskEmptyState
-        projectId={projectId}
-        onCreated={() => refetch()}
-      />
-    )
-  }
 
   return (
     <div className="flex flex-col h-full">
@@ -94,22 +78,25 @@ export default function ProjectDetailsPage() {
           onCreated={() => { refetch() }}
         />
       </div>
-      <TaskStatusTab activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+      <TaskStatusTab activeFilter={filter} setActiveFilter={setFilter} />
 
       <div className="flex-1 overflow-y-auto space-y-6">
         <TaskSection
           title="Tâches"
-          emptyMessage={getEmptyMessage(activeFilter)}
+          emptyMessage={EMPTY_MESSAGES[filter] || 'Aucune tâche trouvée.'}
           tasks={activeTasks}
           variant="active"
         />
 
-        <TaskSection
-          title="Tâches archivées"
-          emptyMessage="Aucune tâche archivée."
-          tasks={archivedTasks}
-          variant="archived"
-        />
+        {!isFiltering && (
+          <TaskSection
+            title="Tâches archivées"
+            emptyMessage="Aucune tâche archivée."
+            tasks={archivedTasks}
+            variant="archived"
+          />
+        )}
+
       </div>
     </div>
   )

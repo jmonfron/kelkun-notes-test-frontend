@@ -25,7 +25,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import {
-  Task,
   useCreateTaskMutation
 } from '@/services/graphql/generated/graphql'
 import { createTaskSchema } from '@/services/schemas/tasks/createTaskSchema'
@@ -34,7 +33,7 @@ import { createTaskSchema } from '@/services/schemas/tasks/createTaskSchema'
 
 interface IProps {
   projectId: string
-  onCreated: (task: Task) => void
+  onCreated: (projectId: string) => void
 }
 
 type CreateTaskFormValues = z.infer<typeof createTaskSchema>
@@ -51,7 +50,7 @@ export default function CreateTaskFormDialog({
       toast.success('Tâche créée avec succès 🎉')
       setIsOpen(false)
       form.reset()
-      onCreated(res.createTask as Task)
+      onCreated(projectId)
     }
   })
 
